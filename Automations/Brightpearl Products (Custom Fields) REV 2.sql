@@ -1,0 +1,60 @@
+SELECT 
+    CAST('SKU' AS NVARCHAR(100)) AS [SKU], 
+    CAST('Product ID' AS NVARCHAR) AS [Product ID], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Additional Product Information], 
+    CAST('List of Value Text' AS NVARCHAR) AS [Commodity Code], 
+    CAST('List of Value Text' AS NVARCHAR) AS [Country of Origin], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Primary Category], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Promotions], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Quaternary Category], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Secondary Category], 
+    CAST('List of Value Text' AS NVARCHAR(250)) AS [Tertiary Category]
+UNION ALL
+SELECT DISTINCT
+    CAST(p.[SKU] AS NVARCHAR(100)),
+    CAST(p.[Product ID] AS NVARCHAR),
+    CAST(pcf1.pcf_value AS NVARCHAR(250)) AS [Additional Product Information],
+    CAST(pcf2.pcf_value AS NVARCHAR) AS [Commodity Code],
+    CAST(pcf3.pcf_value AS NVARCHAR) AS [Country of Origin],
+    CAST(pcf8.pcf_value AS NVARCHAR(250)) AS [Primary Category],
+    CAST(pcf4.pcf_value AS NVARCHAR(250)) AS [Promotions],
+    CAST(pcf5.pcf_value AS NVARCHAR(250)) AS [Quaternary Category],
+    CAST(pcf6.pcf_value AS NVARCHAR(250)) AS [Secondary Category],
+    CAST(pcf7.pcf_value AS NVARCHAR(250)) AS [Tertiary Category]
+FROM
+    usr.ProductsView AS p
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf ON p.[Product ID] = pcf.[pcf_prd_id]
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf1 ON [Product ID] = pcf1.[pcf_prd_id] AND pcf1.pcf_name='PCF_ADDITION'
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf2 ON [Product ID] = pcf2.[pcf_prd_id] AND pcf2.pcf_name='PCF_COMMCODE'
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf3 ON [Product ID] = pcf3.[pcf_prd_id] AND pcf3.pcf_name='PCF_ORIGIN'
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf4 ON [Product ID] = pcf4.[pcf_prd_id] AND pcf4.pcf_name='PCF_PROMO'
+LEFT JOIN 
+    dbo.tblProductCustomField AS pcf5 ON [Product ID] = pcf5.[pcf_prd_id] AND pcf5.pcf_name='PCF_CAT4'
+LEFT JOIN
+    dbo.tblProductCustomField AS pcf6 ON [Product ID] = pcf6.[pcf_prd_id] AND pcf6.pcf_name='PCF_CAT2'
+LEFT JOIN
+    dbo.tblProductCustomField AS pcf7 ON [Product ID] = pcf7.[pcf_prd_id] AND pcf7.pcf_name='PCF_CAT3'
+LEFT JOIN
+    dbo.tblProductCustomField AS pcf8 ON [Product ID] = pcf8.[pcf_prd_id] AND pcf8.pcf_name='PCF_CAT1'
+WHERE
+    [Status] <> 'ARCHIVED'
+    AND pcf.[pcf_name] IN ('PCF_ADDITION', 'PCF_ORIGIN', 'PCF_COMMCODE', 'PCF_CAT1', 'PCF_CAT2', 'PCF_CAT3', 'PCF_CAT4', 'PCF_PROMO')
+    AND [Product ID] NOT IN (32875, 56351, 60298, 60299, 60301, 60302, 60300, 60303, 64187, 64183, 64185, 64188, 64184, 64186, 64181, 64177, 64179, 64182, 64178,
+    64180, 64172, 64173, 64174, 64175, 64176, 64170, 64171, 63895, 63904, 63908, 63912, 63896, 63916, 63897, 63898, 63899, 63900, 64009, 64018, 64019, 64020, 64021,
+    64022, 64023, 64024, 64025, 64026, 64027, 64010, 64028, 64029, 64030, 64031, 64032, 64011, 64012, 64013, 64014, 64015, 64016, 64017, 64033, 64034, 64035, 64036,
+    64037, 64038, 64039, 64040, 64041, 64042, 64043, 64044, 64045, 64046, 64047, 64048, 64049, 64050, 64051, 64052, 64053, 64054, 64055, 64056, 64057, 64058, 64059,
+    64060, 64061, 64062, 64063, 64064, 64065, 64066, 64067, 64068, 64069, 64070, 64071, 64072, 64073, 64074, 63920, 63929, 63933, 63937, 63921, 63941, 63922, 63923,
+    63924, 63925, 64075, 64076, 64077, 64078, 64079, 64080, 64089, 64090, 64091, 64081, 64082, 64083, 64084, 64085, 64086, 64087, 64088, 64092, 64093, 64094, 64095,
+    64096, 64097, 64098, 64099, 64100, 64101, 64102, 64103, 64104, 64105, 64106, 64107, 64108, 64109, 64118, 64119, 64120, 64121, 64122, 64123, 64124, 64125, 64126,
+    64127, 64110, 64128, 64129, 64130, 64131, 64132, 64133, 64134, 64135, 64136, 64137, 64111, 64138, 64112, 64113, 64114, 64115, 64116, 64117, 64139, 64140, 64141,
+    64142, 64143, 64144, 64145, 63945, 63946, 63947, 63948, 64146, 64155, 64156, 64157, 64147, 64148, 64149, 64150, 64151, 64152, 64153, 64154, 64158, 64167, 64168,
+    64169, 64159, 64160, 64161, 64162, 64163, 64164, 64165, 64166, 63949, 63958, 63959, 63960, 63961, 63962, 63963, 63964, 63965, 63966, 63967, 63950, 63968, 63969,
+    63970, 63971, 63972, 63951, 63952, 63953, 63954, 63955, 63956, 63957, 63973, 63982, 63983, 63984, 63985, 63986, 63987, 63988, 63989, 63990, 63974, 63975, 63976,
+    63977, 63978, 63979, 63980, 63981, 63991, 63992, 63993, 63994, 63995, 63996, 63997, 63998, 63999, 64000, 64001, 64002, 64003, 64004, 64005, 64006, 64007, 64008,
+    63905, 63906, 63907, 63909, 63910, 63911, 63913, 63914, 63915, 63917, 63918, 63919, 63901, 63902, 63903, 63930, 63931, 63932, 63934, 63935, 63936, 63938, 63939,
+    63940, 63942, 63943, 63944, 63926, 63927, 63928, 52618, 52619)
