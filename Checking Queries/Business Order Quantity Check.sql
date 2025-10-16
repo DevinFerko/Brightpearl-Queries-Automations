@@ -9,6 +9,7 @@ INNER JOIN tblOrder AS o ON jt.jtr_orderId = o.ord_id
 INNER JOIN tblOrderLine AS ol ON o.ord_id = ol.orl_ord_id
 INNER JOIN tblContact AS c ON j.jou_contactId = c.con_id
 WHERE c.con_emailsPRI = 'accounts@islandbathrooms.co.uk'
+AND jt.jtr_invoiceReference IS NOT NULL
 GROUP BY 
     c.con_emailsPRI, 
     j.jou_taxDate, 
