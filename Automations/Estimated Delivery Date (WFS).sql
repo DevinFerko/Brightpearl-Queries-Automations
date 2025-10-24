@@ -1,0 +1,28 @@
+SELECT
+    oi.[Order Id],
+    CAST(GETDATE() AS DATE) AS [Last Update],
+    ocf1.ocf_value AS [Estimated delivery date],
+    STRING_AGG(ocf2.ocf_value, ', ') AS [Other],
+    o.[Delivery Date]
+FROM
+    usr.OrderItemsView AS oi
+LEFT JOIN
+    usr.OrdersView AS o ON o.[Order Id] = oi.[Order Id]
+LEFT JOIN 
+    dbo.tblOrderCustomField AS ocf1 
+    ON oi.[Order Id] = ocf1.[ocf_ord_id] AND ocf1.ocf_name = 'PCF_ESTIMATE'
+LEFT JOIN 
+    dbo.tblOrderCustomField AS ocf2 
+    ON oi.[Order Id] = ocf2.[ocf_ord_id] AND ocf2.ocf_name != 'PCF_ESTIMATE'
+WHERE
+    o.[Type] = 'SO'
+    AND o.[Status] IN ('Waiting for stock', 'Unconfirmed Dropship', 'Back Order')
+    AND oi.[Order Id] NOT IN (
+        1789585, 1793735, 1785427, 1615047, 1612041, 1583776, 
+        1488394, 1445676, 1420702, 1420699, 1401950, 1355899, 
+        1334838, 1334786, 1910414
+    )
+GROUP BY
+    oi.[Order Id],
+    ocf1.ocf_value,
+    o.[Delivery Date]
