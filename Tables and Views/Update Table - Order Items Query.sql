@@ -32,7 +32,7 @@ END
 -- Step 2: Update existing records
 UPDATE target
 SET 
-    target.[Order ID] = source.[Order ID],
+    target.[Order Id] = source.[Order Id],
     target.[Parent Order Row Id] = source.[Parent Order Row Id],
     target.[Product ID] = source.[Product ID],
     target.[Product SKU] = source.[Product SKU],
@@ -59,15 +59,15 @@ INNER JOIN (
     -- Source Data
     SELECT DISTINCT
         orl_id AS [Order Line ID],
-        ord_id AS [Order Id],
-        ord_parentOrderId AS [Parent Order Row Id],
+        orl_ord_id AS [Order Id],
+        orl_parentOrderRowId AS [Parent Order Row Id],
         orl_productId AS [Product ID],
         orl_productSku AS [Product SKU],
         CASE WHEN orl_compositionBundleParent = 0 THEN 'No' ELSE 'Yes' END AS [Bundle Parent (Yes / No)],
         CASE WHEN orl_compositionBundleChild = 0 THEN 'No' ELSE 'Yes' END AS [Bundle Child (Yes / No)],
         CASE WHEN prd_compositionBundle = 0 THEN 'No' ELSE 'Yes' END AS [Bundle Product],
-        ord_orderCurrencyCode AS [Currency Code],
-        ord_accountingCurrencyCode AS [Cost Currency Code],
+        orl_rowNetCurrencyCode AS [Currency Code],
+        orl_itemCostCurrencyCode AS [Cost Currency Code],
         orl_itemCostCurrencyCode AS [Price Currency Code],
         orl_rowNetValue AS [Amount],
         orl_rowTaxValue AS [Tax],
@@ -96,11 +96,11 @@ INSERT INTO usr.OrderItems (
     [Nominal Code], [Order Time], [Tax Code], [Tax Rate]
 )
 SELECT DISTINCT
-    orl_id, ord_id, ord_parentOrderId, orl_productId, orl_productSku, 
+    orl_id, orl_ord_id, orl_parentOrderRowId, orl_productId, orl_productSku, 
     CASE WHEN orl_compositionBundleParent = 0 THEN 'No' ELSE 'Yes' END, 
     CASE WHEN orl_compositionBundleChild = 0 THEN 'No' ELSE 'Yes' END, 
     CASE WHEN prd_compositionBundle = 0 THEN 'No' ELSE 'Yes' END, 
-    ord_orderCurrencyCode, ord_accountingCurrencyCode, 
+    orl_rowNetCurrencyCode, orl_itemCostCurrencyCode, 
     orl_itemCostCurrencyCode, orl_rowNetValue,  orl_rowTaxValue, orl_discountPercentage, 
     orl_itemCostValue, (orl_itemCostValue * orl_quantity), orl_productPriceValue, 
     orl_quantity, orl_productName, orl_nominalCode, ord_placedOn, orl_taxCode, 
