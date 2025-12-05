@@ -1,5 +1,5 @@
 SELECT DISTINCT 
-    pcf_name
-    ,pcf_value
+    *
 FROM tblProductCustomField
-WHERE pcf_value LIKE'%suite%'
+--WHERE pcf_value LIKE'%bathroom suite%'
+WHERE pcf_prd_id = 64344
