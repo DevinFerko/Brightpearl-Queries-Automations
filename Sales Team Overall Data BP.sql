@@ -1,4 +1,4 @@
-SELECT DISTINCT TOP(1000)
+SELECT DISTINCT
     CAST(o.ord_invoicetaxDate AS date) AS [Tax Date]
     ,o.ord_id AS [Order ID]
     ,o.ord_orderTypeCode AS [Order Type]
