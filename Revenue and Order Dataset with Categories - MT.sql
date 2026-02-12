@@ -1,5 +1,5 @@
 WITH data as (
-    SELECT 
+    SELECT DISTINCT -- Added Distinct to remove any possible duplicated rows
         CAST(ord_placedOn AS date) AS order_date,
         
         CAST(ord_invoicetaxDate AS date) AS invoice_tax_date, -- For Tax Dates, can also be used to filter for invoiced or not
@@ -24,7 +24,7 @@ WITH data as (
 
 
 channel as (
-    SELECT 
+    SELECT DISTINCT -- Added Distinct to remove any possible duplicated rows
         chn_id, 
         chn_name 
     FROM [dbo].[tblChannel]
@@ -32,7 +32,7 @@ channel as (
 
 
 products as ( 
-    SELECT 
+    SELECT DISTINCT -- Added Distinct to remove any possible duplicated rows
         orl_ord_id,
         orl_productID,
         orl_productSku, 
@@ -49,8 +49,11 @@ products as (
     )
 
 SELECT DISTINCT -- Added Distinct to remove any possible duplicated rows
-    * 
+    primary_category,
+    sum(net) 
 FROM data d
 LEFT JOIN channel c ON d.ord_channelId = c.chn_id
 LEFT JOIN products p ON d.ord_id = p.orl_ord_id
--- WHERE invoice_tax_date IS NOT NULL -- Will get orders with invoiced dates
+--WHERE invoice_tax_date = '2026-12-27' -- Will get orders with invoiced dates
+Group by primary_category
+--WHERE invoice_tax_date = '2026-12-27' -- Will get orders with invoiced dates
