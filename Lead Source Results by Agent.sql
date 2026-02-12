@@ -1,11 +1,16 @@
 SELECT DISTINCT
+    (c.con_firstName + ' ' + c.con_lastName) AS 'Assigned To',
     CASE
         WHEN o.ord_leadSourceId = 8 THEN 'LiveChat'
         WHEN o.ord_leadSourceId = 5 THEN 'Telephone'
         WHEN o.ord_leadSourceId = 7 THEN 'Email'
     END AS 'Lead Source Name',
     SUM(ol.orl_quantity) AS 'Items',
-    APPROX_COUNT_DISTINCT(o.ord_id) AS 'Orders'
+    APPROX_COUNT_DISTINCT(o.ord_id) AS 'Orders',
+    o.ord_orderStatusName,
+    SUM(ol.orl_itemCostValue) AS 'Cost',
+    SUM(ol.orl_rowNetValue) AS 'Revenue',
+    SUM(ol.orl_rowNetValue+ol.orl_rowTaxValue) AS 'Gross Revenue'
 FROM
     dbo.tblOrder AS o 
 LEFT JOIN
@@ -13,11 +18,12 @@ LEFT JOIN
 LEFT JOIN
     dbo.tblContact AS c ON o.ord_staffOwnerContactId = c.con_id
 WHERE
-    o.ord_channelId IN (2,7,8)
+    o.ord_channelId IN (2, 7, 8)
     AND o.ord_orderTypeCode = 'SO'
     AND o.ord_invoicetaxDate IS NOT NULL
     AND o.ord_invoicetaxDate >= '2026/01/01'
     AND o.ord_invoicetaxDate <= '2026/01/31'
     AND c.con_firstName = 'Lottie'
+    AND o.ord_orderStatusName IN ('Ready to Ship', 'Invoiced')
 GROUP BY
-    o.ord_leadSourceId
+    o.ord_leadSourceId, o.ord_orderStatusName, c.con_firstName, c.con_lastName
