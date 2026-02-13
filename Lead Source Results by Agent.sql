@@ -1,4 +1,5 @@
 SELECT DISTINCT
+    --o.ord_invoicetaxDate AS 'Tax Date' --Uncomment for filtering when entered into Tableau report 
     (c.con_firstName + ' ' + c.con_lastName) AS 'Assigned To',
     CASE
         WHEN o.ord_leadSourceId = 8 THEN 'LiveChat'
@@ -10,7 +11,8 @@ SELECT DISTINCT
     o.ord_orderStatusName,
     SUM(ol.orl_itemCostValue) AS 'Cost',
     SUM(ol.orl_rowNetValue) AS 'Revenue',
-    SUM(ol.orl_rowNetValue+ol.orl_rowTaxValue) AS 'Gross Revenue'
+    SUM(ol.orl_rowNetValue+ol.orl_rowTaxValue) AS 'Gross Revenue',
+    SUM(ol.orl_rowNetValue-ol.orl_itemCostValue) AS 'Gross Profit'
 FROM
     dbo.tblOrder AS o 
 LEFT JOIN
@@ -23,7 +25,7 @@ WHERE
     AND o.ord_invoicetaxDate IS NOT NULL
     AND o.ord_invoicetaxDate >= '2026/01/01'
     AND o.ord_invoicetaxDate <= '2026/01/31'
-    AND c.con_firstName = 'Lottie'
+    AND c.con_firstName = 'Lottie' -- Comment out when placed in Tableau
     AND o.ord_orderStatusName IN ('Ready to Ship', 'Invoiced')
 GROUP BY
     o.ord_leadSourceId, o.ord_orderStatusName, c.con_firstName, c.con_lastName
