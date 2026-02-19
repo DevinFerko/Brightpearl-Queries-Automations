@@ -1,4 +1,4 @@
-SELECT DISTINCT TOP(100)
+SELECT DISTINCT 
     o.ord_id AS 'Order ID',
     o.ord_orderStatusName AS 'Status',
     SUM(ol.orl_rowNetValue) AS 'Net Value',
@@ -21,6 +21,7 @@ LEFT JOIN
     dbo.tblContact AS c ON o.ord_staffOwnerContactId = c.con_id
 WHERE
     o.ord_orderTypeCode = 'SO'
+    AND o.ord_id = 2294098
 GROUP BY
     o.ord_id,
     o.ord_orderStatusName,
