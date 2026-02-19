@@ -28,4 +28,4 @@ WHERE
     AND c.con_firstName = 'Lottie' -- Comment out when placed in Tableau
     AND o.ord_orderStatusName IN ('Ready to Ship', 'Invoiced')
 GROUP BY
-    o.ord_leadSourceId, o.ord_orderStatusName, c.con_firstName, c.con_lastName
+    o.ord_leadSourceId, o.ord_orderStatusName, c.con_firstName, c.con_lastName, --o.ord_invoicetaxDate AS 'Tax Date' --Uncomment for filtering when entered into Tableau report 
