@@ -48,7 +48,8 @@ LEFT JOIN (
 ) qTotals ON qTotals.parent_prd_id = P.prd_id
 
 WHERE 1=1
-AND p.prd_status<>'ARCHIVED'
+--AND p.prd_status<>'ARCHIVED'
 AND com_cos.prp_priceListId=1
 AND com_sel.prp_priceListId=3
 AND bun_sel.prp_priceListId=3
+AND p.prd_identitySKU = 'BTW0204C'
